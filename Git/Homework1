@@ -1,0 +1,22 @@
+1. Как скопировать на свой компьютер репозиторий из github.com, что должно быть сделано предварительно?
+- Na GitHub.com perejti na glavnuju stranicu repozitorija. Nazhat' CODE
+- Copy URL-adres
+- Otkryt' GIT Bash
+- Perejti v papku, kuda kloniruem repositorij
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+
+2. Как создать git репозиторий из локального каталога на своем компьютере. Как его отправить на github.com?
+$ cd /Users/user/directory
+$ git init
+$ git add
+$ git commit -m '......'
+$ git push
+
+3. Как получить на локальный компьютер изменения с github.com
+$ cd /Users/user/directory
+$ git pull
+
+4. Какую информацию нам дают команда :
+   git status - sostojanie rabochego kataloga, indeksacija izmenenij
+   git log - informacija ob istorii kommitov
+   git remote -v - spisok udalennych podkljuchenij k drugim repositorijam s URL-adresom
