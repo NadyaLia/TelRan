@@ -1,0 +1,24 @@
+1. Как отказаться от изменений в файле (файлах) находящийся в рабочем каталоге (work directory)?
+git checkout
+
+2. Как вернуть файл из индекса в рабочий каталог?
+git restore --staged
+
+3. Как отменить ошибочный commit ?
+git reset HEAD~1
+
+4. Как создать новую ветку и переключится в нее?
+git checkout -b
+
+5. В чем отличение между fast-forward merge  and non fast-forfard merge?
+Fast-forward - eto bystroje slijanie, iz vlivaemoi vetki izvlekajutsja neskolko kommitov i primenjajutsja k poslednemu kommitu vetki, 
+v kotoruju delaem slijanie. Non fast-forward - ne bystroje slijanie, kogda obrazuetsja novi kommit dlja togo, 
+chtobi uchest izmenenija v obeich vetkach.
+
+6. Когда может возникнуть конфликт слияния веток, как  его разрешить?
+Failovi konflikt, kogda vo vremja slijanija perepisivaetsja informacija v failach, naprimer, pojavljautsja dva faila s odnim imenem. 
+Mozhno samostojatelno vruchnuju izmenit konfliktnye faili libo vibrat odin iz nich. Soobschit Git (git add) dlja kazhdogo faila. 
+Prodolzhit slijanie (git merge --continue).
+
+7. Можно ли удалить ветку? Как? 
+git branch -d
