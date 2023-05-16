@@ -9,7 +9,10 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 $ cd /Users/user/directory
 $ git init
 $ git add
-$ git commit -m '......'
+$ git commit -m '......'        $ git remote add origin <REMOTE_URL>
+				# Sets the new remote
+				$ git remote -v
+				# Verifies the new remote URL
 $ git push
 
 3. Как получить на локальный компьютер изменения с github.com
