@@ -9,7 +9,6 @@ INSERT INTO goods (id, title, quantity) values
     (2, 'ski', 5),
     (3, 'roller', 7),
     (4, 'skate', 2);
-    
 ALTER TABLE goods
 ADD COLUMN price integer default 0;
 

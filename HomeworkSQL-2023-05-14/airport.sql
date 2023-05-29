@@ -11,6 +11,18 @@ SELECT
 FROM
     tickets;
     
+SELECT
+	id,
+    service_class,
+    price
+FROM tickets
+	WHERE CASE service_class
+		WHEN 'Bussiness' THEN price > 100000
+        WHEN 'PremiumEconomy' THEN price BETWEEN 20000 AND 30000
+        WHEN 'Economy' THEN price BETWEEN 10000 AND 11000
+	END;
+    
+    
 SELECT 
     side_number,
     CASE
@@ -23,13 +35,14 @@ FROM
     WHERE range_ < 10000
     ORDER BY age;
     
+
  SELECT 
      id,
      trip_id,
      CASE
-         WHEN service_class = 'Economy' THEN price - (price * 0.15)
-         WHEN service_class = 'Business' THEN price - (price * 0.1)
-         WHEN service_class = 'PremiumEconomy' THEN price - (price * 0.2)
+         WHEN service_class = 'Economy' THEN price * 0.85
+         WHEN service_class = 'Business' THEN price * 0.9
+         WHEN service_class = 'PremiumEconomy' THEN price * 0.8
      END AS new_price
  FROM
      tickets;
