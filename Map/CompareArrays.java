@@ -10,7 +10,7 @@ public class CompareArrays {
 
 
         boolean flag = isEqual(arr1, arr2);
-            if (flag == true) {
+            if (flag) {
                 System.out.println("Yes");
             } else {
                 System.out.println("No");
@@ -40,11 +40,8 @@ public class CompareArrays {
             }
         }
 
-        for (Map.Entry<Integer, Integer> pair : map1.entrySet()) {
-            Integer key = pair.getKey();
-            if (map2.get(key) != pair.getValue()) {
-                return false;
-            }
+        if (map1.equals(map2)) {
+            return true;
         }
         return true;
     }
