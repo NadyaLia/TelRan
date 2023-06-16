@@ -5,7 +5,7 @@ public class GameField {
      * Array containing the game field
      * Массив, содержащий игровое поле
      */
-    public char[][] field;
+    private char[][] field;
 
     /**
      * Value of an empty cell
@@ -14,12 +14,30 @@ public class GameField {
     private final char EMPTY_CELL = '.';
 
     /**
-     * Constructor
-     * Конструктор
+     * Size of the game field.
+     * Размер игрового поля.
      */
-    public GameField() {
+    private final int FIELD_SIZE;
+
+    /**
+     * Length of the win combination.
+     * Длина выигрышной комбинации.
+     */
+    private final int WIN_LENGTH;
+
+    /**
+     * Constructor.
+     * Конструктор.
+     *
+     * @param fieldSize size of the game field / размер игрового поля.
+     */
+    public GameField(int fieldSize, int winLength) {
+        // Implement the constructor body.
         // When this constructor is called, initial filling of the game field should be performed.
+        // Реализовать тело конструктора.
         // При вызове конструктора должно производиться первоначальное заполнение игрового поля.
+        this.FIELD_SIZE = fieldSize;
+        this.WIN_LENGTH = winLength;
         initialize();
     }
 
@@ -29,16 +47,16 @@ public class GameField {
      */
     public void initialize() {
         // Logic of the method:
-        // 1. Initialize the "field" field with an array of the desired size (3 rows, 3 columns).
+        // 1. Initialize the "field" field with an array of the selected size.
         // 2. Fill all cells of the array with the value for an empty cell.
 
         // Логика метода:
-        // 1. Инициализировать поле field массивом нужного размера (3 х 3).
+        // 1. Инициализировать поле field массивом выбранного размера.
         // 2. Пройтись по всему массиву и заполнить все его элементы значением для пустой ячейки.
-        this.field = new char[3][3];
+
+        this.field = new char[FIELD_SIZE][FIELD_SIZE];
 
         for (char[] row : field) {
-
             for (int i = 0; i < row.length; i++) {
                 row[i] = EMPTY_CELL;
             }
@@ -110,25 +128,46 @@ public class GameField {
         int cell = Integer.parseInt(co[0]) - 1;
 
 
-        if (row < 0 || row > 2) {
+        if (row < 0 || row > getFieldSize()) {
             System.out.println("Incorrect input of coordinates");
             return false;
         }
 
-        if (cell < 0 || cell > 2) {
+        if (cell < 0 || cell > getFieldSize()) {
             System.out.println("Incorrect input of coordinates");
             return false;
         }
 
-        char value = field[row][cell];
-
-        if (value != '.') {
+        if (isCellOccupied(row, cell)) {
             System.out.println("Field is already occupied");
             return false;
         }
 
         this.field[row][cell] = symbol.getValue();
 
+        return true;
+    }
+
+    /**
+     * Check if the selected cell is already occupied.
+     * Проверка, занята ли выбранная ячейка.
+     *
+     * @param row       row number / номер строки.
+     * @param column    column number / номер столбца.
+     * @return          true if the cell is already occupied.
+     *                  true, если ячейка занята.
+     */
+    public boolean isCellOccupied(int row, int column) {
+        // Logic of the method:
+        // 1. Return true if the selected cell is already occupied.
+
+        // Логика метода:
+        // 1. Вернуть true, если выбранная ячейка занята.
+        char value = field[row][column];
+
+        if (value != '.') {
+            System.out.println("Cell is already occupied");
+        }
         return true;
     }
 
@@ -166,91 +205,199 @@ public class GameField {
      */
     boolean isWin(char symbol) {
         // Logic of the method:
-        // Return true if at least one of the methods checkRows, checkColumns, checkDiagonals returns true.
+        // 1. Use cycle to go through all the cells of the game field.
+        // 2. For each cell call the methods that check the presence of the win combination
+        //    in four directions. Return true if at least one win combination found.
 
         // Логика метода:
-        // Вернуть true, если хотя бы один из методов checkRows, checkColumns, checkDiagonals вернёт true.
-        if (checkRows(symbol) || checkColumns(symbol) || checkDiagonals(symbol) == true) {
+        // 1. Пройти циклом по всем ячейкам игрового поля.
+        // 2. Для каждой ячейки вызвать методы, проверяющие наличие выигрышной комбинации
+        //    в четырёх направлениях. Если найдётся хотя бы одна комбинация, вернуть true.
+
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                if (checkUpRightDiagonal(i, j, symbol)
+                        || checkDownRightDiagonal(i, j, symbol)
+                        || checkRightDirection(i, j, symbol)
+                        || checkDownDirection(i, j, symbol)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if there is a win combination in the up and right direction from the selected cell.
+     * Проверяем наличие выигрышной комбинации по направлению вверх и вправо от указанной ячейки.
+     *
+     * @param x         x coordinate / координата ячейки x.
+     * @param y         y coordinate / координата ячейки y.
+     * @param symbol    player symbol / символ игрока.
+     * @return          true if there is a win combination.
+     *                  true, если нашли выигрышную комбинацию.
+     */
+    private boolean checkUpRightDiagonal(int x, int y, char symbol) {
+        // Logic of the method:
+        // 1. Use a variable as the counter of the player symbols.
+        // 2. Start the cycle, the number of iterations of which is equal to the win combination length.
+        //      Inside the cycle:
+        //      1. Increment the counter if the current cell contains the player symbol.
+        //      2. Change the coordinates so that the next cell is located up and right from the current cell.
+        //      3. An exception here means going out of bounds of the array,
+        //         and that means there is no win combination present. In that case return false.
+        // 3. Return true if counter value is equal to the win combination length, otherwise return false.
+
+        // Логика метода:
+        // 1. Используем переменную в качестве счётчика символов игрока.
+        // 2. Запускаем цикл, количество итераций которого равно длине выигрышной комбинации.
+        //      Внутри цикла:
+        //      1. Если в текущей ячейке стоит символ игрока - увеличить счётчик.
+        //      2. Изменить координаты таким образом, чтобы следующая проверяемая ячейка была выше и правее текущей.
+        //      3. Если вылетает ошибка, значит вышли за пределы массива,
+        //         а это значит, выигрышной комбинации нет, вернуть false.
+        // 3. Вернуть true, если значение счётчика равно значению длины выигрышной комбинации, иначе вернуть false.
+
+        int countSymbols = 0;
+        for (int i = 0; i <= WIN_LENGTH; i++) {
+            if (field[x][y] == symbol) {
+                countSymbols++;
+                x++;
+                y++;
+            }
+            if (field.length <= x) {
+                return false;
+            }
+            if (field[x].length <= y) {
+                return false;
+            }
+        }
+        if (countSymbols == WIN_LENGTH) {
             return true;
         }
         return false;
     }
 
     /**
-     * Check if the win combination present in any of rows of the game field
-     * Проверка, присутствует ли в каком-либо ряду выигрышная комбинация
+     * Check if there is a win combination in the down and right direction from the selected cell.
+     * Проверяем наличие выигрышной комбинации по направлению вниз и вправо от указанной ячейки.
      *
-     * @param symbol player symbol / символ игрока
-     * @return true if the win combination present in any of rows of the game field
-     * true, если выигрышная комбинация присутствует в каком-либо ряду
+     * @param x         x coordinate / координата ячейки x.
+     * @param y         y coordinate / координата ячейки y.
+     * @param symbol    player symbol / символ игрока.
+     * @return          true if there is a win combination.
+     *                  true, если нашли выигрышную комбинацию.
      */
-    boolean checkRows(char symbol) {
+    private boolean checkDownRightDiagonal(int x, int y, char symbol) {
         // Logic of the method:
-        // Check all the rows of the game field, return true if one of them is completely filled with player symbols.
+        // Same logic as the logic of the previous method but other direction of the searching of the win combination.
 
         // Логика метода:
-        // Пройтись по всем строкам массива и вернуть true, если хотя бы одна из них полностью заполнена символами игрока.
+        // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
-        for (char[] row : field) {
-            for (int i = 0; i < row.length; i++) {
-
-                if (field[i][0] == symbol && field[i][1] == symbol && field[i][2] == symbol) {
-                    return true;
-                }
+        int countSymbols = 0;
+        for (int i = 0; i <= WIN_LENGTH; i++) {
+            if (field[x][y] == symbol) {
+                countSymbols++;
+                x--;
+                y--;
             }
+            if (field.length <= x) {
+                return false;
+            }
+            if (field[x].length <= y) {
+                return false;
+            }
+        }
+        if (countSymbols == WIN_LENGTH) {
+            return true;
         }
         return false;
     }
 
     /**
-     * Check if the win combination present in any of columns of the game field
-     * Проверка, присутствует ли в каком-либо столбце выигрышная комбинация
+     * Check if there is a win combination in the right direction from the selected cell.
+     * Проверяем наличие выигрышной комбинации по направлению вправо от указанной ячейки.
      *
-     * @param symbol player symbol / символ игрока
-     * @return true if the win combination present in any of columns of the game field
-     * true, если выигрышная комбинация присутствует в каком-либо столбце
+     * @param x         x coordinate / координата ячейки x.
+     * @param y         y coordinate / координата ячейки y.
+     * @param symbol    player symbol / символ игрока.
+     * @return          true if there is a win combination.
+     *                  true, если нашли выигрышную комбинацию.
      */
-    boolean checkColumns(char symbol) {
+    private boolean checkRightDirection(int x, int y, char symbol) {
         // Logic of the method:
-        // Check all the columns of the game field, return true if one of them is completely filled with player symbols.
+        // Same logic as the logic of the previous method but other direction of the searching of the win combination.
 
         // Логика метода:
-        // Пройтись по всем столбцам массива и вернуть true, если хотя бы один из них полностью заполнен символами игрока.
-        for (char[] row : field) {
-            for (int i = 0; i < row.length; i++) {
+        // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
-                if (field[0][i] == symbol && field[1][i] == symbol && field[2][i] == symbol) {
-                    return true;
-                }
+        int countSymbols = 0;
+        for (int i = 0; i <= WIN_LENGTH; i++) {
+            if (field[x][y] == symbol) {
+                countSymbols++;
+                x++;
             }
+            if (field.length <= x) {
+                return false;
+            }
+            if (field[x].length <= y) {
+                return false;
+            }
+        }
+        if (countSymbols == WIN_LENGTH) {
+            return true;
         }
         return false;
     }
 
     /**
-     * Check if the win combination present in any of diagonals of the game field
-     * Проверка, присутствует ли в одной из диагоналей выигрышная комбинация
+     * Check if there is a win combination in the down direction from the selected cell.
+     * Проверяем наличие выигрышной комбинации по направлению вниз от указанной ячейки.
      *
-     * @param symbol player symbol / символ игрока
-     * @return true if the win combination present in any of diagonals of the game field
-     * true, если выигрышная комбинация присутствует в одной из диагоналей
+     * @param x         x coordinate / координата ячейки x.
+     * @param y         y coordinate / координата ячейки y.
+     * @param symbol    player symbol / символ игрока.
+     * @return          true if there is a win combination.
+     *                  true, если нашли выигрышную комбинацию.
      */
-    boolean checkDiagonals(char symbol) {
+    private boolean checkDownDirection(int x, int y, char symbol) {
         // Logic of the method:
-        // Check all the diagonals of the game field, return true if one of them is completely filled with player symbols.
+        // Same logic as the logic of the previous method but other direction of the searching of the win combination.
 
         // Логика метода:
-        // Вернуть true, если хотя бы одна из диагоналей полностью заполнена символами игрока.
-        for (char[] row : field) {
-            for (int i = 0; i < row.length; i++) {
+        // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
-                if (field[0][0] == symbol && field[1][1] == symbol && field[2][2] == symbol ||
-                        field[2][0] == symbol && field[1][1] == symbol && field[0][2] == symbol) {
-                    return true;
-                }
+        int countSymbols = 0;
+        for (int i = 0; i <= WIN_LENGTH; i++) {
+            if (field[x][y] == symbol) {
+                countSymbols++;
+                y--;
+            }
+            if (field.length <= x) {
+                return false;
+            }
+            if (field[x].length <= y) {
+                return false;
             }
         }
+        if (countSymbols == WIN_LENGTH) {
+            return true;
+        }
         return false;
+    }
+
+    /**
+     * Getter.
+     * Геттер.
+     *
+     * @return size of the game field / размер игрового поля.
+     */
+    public int getFieldSize() {
+        // Implement the getter body.
+        // Реализовать тело геттера.
+
+        return FIELD_SIZE;
     }
 }
-

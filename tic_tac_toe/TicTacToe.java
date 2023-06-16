@@ -8,15 +8,13 @@ import java.util.Scanner;
 public class TicTacToe {
     private static final List<Player> PLAYERS = new ArrayList<>();
     private static boolean isGameOver;
+    private static GameField field;
+    private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         // Logic of the method:
-        // 1. Print the name of the game to the console.
-        // 2. Create an instance of the game field.
-        // 3. Create two players and add them to the list of players.
-        //    Players should have different names and different game symbols.
-        // 4. Print the game field to the console (using the method of the game field instance).
-        // 5. Start the game cycle, which continues while isGameOver value is false.
+        // 1. Create the game field (call the right method located in this class).
+        // 2. Start the game cycle, which continues while isGameOver value is false.
         //      Inside the cycle:
         //      1. Start another cycle that iterates through the players, inside this cycle:
         //      2. Read the coordinates inputted by the player (using the method of the player instance).
@@ -29,12 +27,8 @@ public class TicTacToe {
         //         In that case print the message about the draw to the console and finish the game.
 
         // Логика работы метода:
-        // 1. Вывести в консоль название игры.
-        // 2. Создать экземпляр игрового поля.
-        // 3. Создать двух игроков и добавить их к списку игроков.
-        //    У игроков должны быть разные имена и разные игровые символы.
-        // 4. Отрисовать в консоли игровое поле (с помощью готового метода игрового поля).
-        // 5. Запустить игровой цикл, который продолжается до тех пор, пока isGameOver == false.
+        // 1. Создать игровое поле (вызвать соответствующий метод этого же класса).
+        // 2. Запустить игровой цикл, который продолжается до тех пор, пока isGameOver == false.
         //    Внутри цикла:
         //      1. Запустить ещё один цикл, перебирающий игроков и внутри этого цикла:
         //      2. Считать координаты, введённые игроком с помощью готового метода игрока.
@@ -46,22 +40,8 @@ public class TicTacToe {
         //      7. Проверить, не заполнено ли игровое поле полностью.
         //         Если заполнено - выводим сообщение о ничье и завершаем игру.
 
-        System.out.println("Tic Tac Toe");
 
-        GameField gf = new GameField();
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Name of the first player");
-        String playerName1 = input.nextLine();
-        System.out.println("Name of the second player");
-        String playerName2 = input.nextLine();
-
-        PLAYERS.add(new HumanPlayer(playerName1, PlayerSymbol.O));
-        PLAYERS.add(new HumanPlayer(playerName2, PlayerSymbol.X));
-
-        gf.repaint();
-
+        init();
         do {
 
             for (int i = 0; i < PLAYERS.size(); i++) {
@@ -72,27 +52,175 @@ public class TicTacToe {
                 boolean successfulMove = false;
                 while (!successfulMove) {
                     String coordinates = PLAYERS.get(i).makeMove();
-                    successfulMove = gf.setSymbol(player.getSymbol(), coordinates);
+                    successfulMove = field.setSymbol(player.getSymbol(), coordinates);
 
                     if (successfulMove) {
-                        gf.repaint();
+                        field.repaint();
                     }
                 }
 
-                if (gf.isFieldFull()) {
-                    isGameOver = true;
-                    System.out.println("The game is over! Draw!");
-                    break;
-                }
-
                 boolean win = false;
-                win = gf.isWin(player.getSymbol().getValue());
+                win = field.isWin(player.getSymbol().getValue());
                 if (win) {
                     isGameOver = true;
                     System.out.println(player.getName() + " - you won!");
                     break;
                 }
+
+                if (field.isFieldFull()) {
+                    isGameOver = true;
+                    System.out.println("The game is over! Draw!");
+                    break;
+                }
             }
-        } while (isGameOver == false);
+        } while (!isGameOver);
+        System.out.println();
+    }
+
+    /**
+     * Initializing of the game, creating the game field.
+     * Первоначальная инициализация игры, создание игрового поля.
+     */
+    private static void init() {
+        // Logic of the method:
+        // 1. Print the name of the game to the console.
+        // 2. Create an instance of the game field
+        //    (get the size of it and the win combination length
+        //    by calling a right methods located in this class).
+        // 3. Create two players by calling a right method located in this class.
+        // 4. Print the game field to the console (using the method of the game field instance).
+
+        // Логика работы метода:
+        // 1. Вывести в консоль название игры.
+        // 2. Создать экземпляр игрового поля
+        //    (получив его размер и длину выигрышной комбинации,
+        //    вызвав соответствующие методы данного класса).
+        // 3. Создать двух игроков, используя метод данного класса.
+        // 4. Отрисовать в консоли игровое поле (с помощью готового метода игрового поля).
+
+        System.out.println("Tic Tac Toe");
+
+        int fieldSize = getFieldSize();
+        int winLength = getWinLength(fieldSize);
+        field = new GameField(fieldSize, winLength);
+
+        createPlayers();
+
+        field.repaint();
+    }
+
+    /**
+     * Creating two players, the second player may be AI depending on the selected game mode.
+     * Метод создаёт игроков в зависимости от выбранного режима игры.
+     */
+    private static void createPlayers() {
+        // Logic of the method:
+        // 1. Print to the console invitation to select the game mode: 1 - human against human, 2 - human against AI.
+        // 2. Read the inputted value from the console.
+        // 3. Repeat steps 1 and 2 until the player inputs the correct value.
+        // 4. Create a human player and add him ti the game.
+        // 5. Depends on the selected game mode create human or AI player and add him/it to the game.
+
+        // Логика работы метода:
+        // 1. Выведите в консоль приглашение выбрать режим игры: 1 - два игрока, 2 - игрок против компьютера.
+        // 2. Считать с консоли значение, введённое игроком.
+        // 3. Повторять пункты 1 и 2 до тех пор, пока не будет введено корректное значение.
+        // 4. Создать и добавить в игру первого игрока-человека.
+        // 5. В зависимости от выбранного режима игры создать игрока-человека
+        //    или компьютерного игрока и добавить в игру.
+
+       Scanner input2 = new Scanner(System.in);
+
+        boolean isCorrectValue = false;
+        String gameMode = "";
+        while (!isCorrectValue) {
+            System.out.println("Please select the game mode: 1 - human against human, 2 - human against AI");
+            gameMode = input2.nextLine();
+            if (gameMode.equals("1") || gameMode.equals("2")) {
+                isCorrectValue = true;
+            } else {
+                System.out.println("Your input is not correct");
+            }
+        }
+
+        System.out.println("Name of the first player");
+        String playerName1 = input2.nextLine();
+        PLAYERS.add(new HumanPlayer(playerName1, PlayerSymbol.O));
+        System.out.println("-------");
+        if (gameMode.equals("1")) {
+            System.out.println("Name of the second player");
+            String playerName2 = input2.nextLine();
+            PLAYERS.add(new HumanPlayer(playerName2, PlayerSymbol.X));
+        } else if (gameMode.equals("2")) {
+            System.out.println("Play against the computer");
+            PLAYERS.add(new ComputerPlayer(PlayerSymbol.X, field));
+        } else {
+            System.out.println("Invalid mode");
+        }
+    }
+
+    /**
+     * Choosing the win combination length by the player.
+     * Выбор игроком длины выигрышной комбинации.
+     *
+     * @param fieldSize game field size / размер игрового поля.
+     * @return          win combination length / длина выигрышной комбинации.
+     */
+    private static int getWinLength(int fieldSize) {
+        // Logic of the method:
+        // 1. Print to the console invitation to select the win combination length
+        //    (from 3 to value of the game field size).
+        // 2. Read the inputted value from the console.
+        // 3. Repeat steps 1 and 2 until the player inputs the correct value.
+        // 4. Return the inputted value.
+
+        // Логика работы метода:
+        // 1. Вывести в консоль приглашение выбрать длину выигрышной комбинации
+        //    (от 3 до значения размера игрового поля).
+        // 2. Считать с консоли число, введённое игроком.
+        // 3. Повторять шаги 1 и 2 до тех пор, пока игрок не введёт корректное значение.
+        // 4. Вернуть введённое значение.
+        boolean validWinSize = false;
+        int winLength = 0;
+        while (!validWinSize) {
+            System.out.println("Please select the win combination length from 3 to "+ fieldSize);
+            winLength = input.nextInt();
+
+            if (winLength >= 3 && winLength <= fieldSize) {
+                validWinSize = true;
+            } else {
+                System.out.println("Your input is not correct");
+            }
+        }
+        return winLength;
+    }
+
+    /**
+     * Choosing the game field size by the player.
+     * Выбор игроком размера игрового поля.
+     *
+     * @return the size of the game field / размер игрового поля.
+     */
+    private static int getFieldSize() {
+        // Logic of the method:
+        // 1. Print to the console invitation to select the game field size.
+        // 2. Read the inputted value from the console.
+        // 3. Repeat steps 1 and 2 until the player inputs the correct value.
+        // 4. Return the inputted value.
+
+        // Логика работы метода:
+        // 1. Вывести в консоль приглашение выбрать размер игрового поля (от 3 до 8).
+        // 2. Считать с консоли число, введённое игроком.
+        // 3. Повторять шаги 1 и 2 до тех пор, пока игрок не введёт корректное значение.
+        // 4. Вернуть введённое значение.
+
+        System.out.println("Please select the game field size from 3 to 8");
+
+        int fieldSize;
+        do {
+            fieldSize = input.nextInt();
+        } while (fieldSize < 3 || fieldSize > 8);
+        return fieldSize;
     }
 }
+
