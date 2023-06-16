@@ -167,8 +167,9 @@ public class GameField {
 
         if (value != '.') {
             System.out.println("Cell is already occupied");
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
