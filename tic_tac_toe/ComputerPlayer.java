@@ -76,7 +76,6 @@ public class ComputerPlayer extends AbstractPlayer {
             if (!isOccupied) {
                 madeMove = true;
             }
-
         }
         return coordinates;
     }

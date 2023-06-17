@@ -165,7 +165,6 @@ public class GameField {
         char value = field[row][column];
 
         if (value != '.') {
-
             return true;
         }
         return false;
@@ -274,7 +273,6 @@ public class GameField {
                 x--;
                 y++;
             }
-
         }
         if (countSymbols == WIN_LENGTH) {
             System.out.println("won by UpRightDiagonal");
@@ -314,7 +312,6 @@ public class GameField {
                 x++;
                 y++;
             }
-
         }
         if (countSymbols == WIN_LENGTH) {
             System.out.println("won by DownRightDiagonal");
@@ -351,7 +348,6 @@ public class GameField {
                 countSymbols++;
                 y++;
             }
-
         }
         if (countSymbols == WIN_LENGTH) {
             System.out.println("won by RightDirection");
@@ -387,7 +383,6 @@ public class GameField {
                 countSymbols++;
                 x++;
             }
-
         }
         if (countSymbols == WIN_LENGTH) {
             System.out.println("won by DownDirection");
