@@ -67,10 +67,16 @@ public class ComputerPlayer extends AbstractPlayer {
         String coordinates = "";
         while (!madeMove) {
 
-            rowValue = (int) (Math.random());
-            columnValue = (int) (Math.random());
-            coordinates = rowValue + " " + columnValue;
-            madeMove = FIELD.setSymbol(SYMBOL, coordinates);
+            rowValue = (int) (Math.random()* (FIELD.getFieldSize()))+1;
+            columnValue = (int) (Math.random()* (FIELD.getFieldSize()))+1;
+            coordinates = columnValue  + " " + rowValue;
+
+            boolean isOccupied = FIELD.isCellOccupied(rowValue-1, columnValue-1);
+
+            if (!isOccupied) {
+                madeMove = true;
+            }
+
         }
         return coordinates;
     }

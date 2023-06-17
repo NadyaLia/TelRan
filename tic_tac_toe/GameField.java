@@ -127,7 +127,6 @@ public class GameField {
         int row = Integer.parseInt(co[1]) - 1;
         int cell = Integer.parseInt(co[0]) - 1;
 
-
         if (row < 0 || row > getFieldSize()) {
             System.out.println("Incorrect input of coordinates");
             return false;
@@ -166,7 +165,7 @@ public class GameField {
         char value = field[row][column];
 
         if (value != '.') {
-            System.out.println("Cell is already occupied");
+
             return true;
         }
         return false;
@@ -261,20 +260,24 @@ public class GameField {
         // 3. Вернуть true, если значение счётчика равно значению длины выигрышной комбинации, иначе вернуть false.
 
         int countSymbols = 0;
-        for (int i = 0; i <= WIN_LENGTH; i++) {
-            if (field[x][y] == symbol) {
-                countSymbols++;
-                x++;
-                y++;
-            }
-            if (field.length <= x) {
+        for (int i = 0; i < WIN_LENGTH; i++) {
+
+            if (x < 0) {
                 return false;
             }
             if (field[x].length <= y) {
                 return false;
             }
+
+            if (field[x][y] == symbol) {
+                countSymbols++;
+                x--;
+                y++;
+            }
+
         }
         if (countSymbols == WIN_LENGTH) {
+            System.out.println("won by UpRightDiagonal");
             return true;
         }
         return false;
@@ -298,20 +301,23 @@ public class GameField {
         // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
         int countSymbols = 0;
-        for (int i = 0; i <= WIN_LENGTH; i++) {
+        for (int i = 0; i < WIN_LENGTH; i++) {
+            if (x >= field.length) {
+                return false;
+            }
+            if (y >= field[x].length) {
+                return false;
+            }
+
             if (field[x][y] == symbol) {
                 countSymbols++;
-                x--;
-                y--;
+                x++;
+                y++;
             }
-            if (field.length <= x) {
-                return false;
-            }
-            if (field[x].length <= y) {
-                return false;
-            }
+
         }
         if (countSymbols == WIN_LENGTH) {
+            System.out.println("won by DownRightDiagonal");
             return true;
         }
         return false;
@@ -335,19 +341,20 @@ public class GameField {
         // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
         int countSymbols = 0;
-        for (int i = 0; i <= WIN_LENGTH; i++) {
+        for (int i = 0; i < WIN_LENGTH; i++) {
+
+            if (y >= field.length) {
+                return false;
+            }
+
             if (field[x][y] == symbol) {
                 countSymbols++;
-                x++;
+                y++;
             }
-            if (field.length <= x) {
-                return false;
-            }
-            if (field[x].length <= y) {
-                return false;
-            }
+
         }
         if (countSymbols == WIN_LENGTH) {
+            System.out.println("won by RightDirection");
             return true;
         }
         return false;
@@ -371,19 +378,19 @@ public class GameField {
         // Та же логика, что у предыдущего метода, только другое направление поиска выигрышной комбинации.
 
         int countSymbols = 0;
-        for (int i = 0; i <= WIN_LENGTH; i++) {
+        for (int i = 0; i < WIN_LENGTH; i++) {
+
+            if (x >= field.length) {
+                return false;
+            }
             if (field[x][y] == symbol) {
                 countSymbols++;
-                y--;
+                x++;
             }
-            if (field.length <= x) {
-                return false;
-            }
-            if (field[x].length <= y) {
-                return false;
-            }
+
         }
         if (countSymbols == WIN_LENGTH) {
+            System.out.println("won by DownDirection");
             return true;
         }
         return false;
