@@ -1,0 +1,45 @@
+db.products.insertMany([
+    {id: 1, title: "roller", price: 3400},
+    {id: 2, title: "bike", price: 400}
+])
+
+db.users.insertMany([
+    {id: 1, name: "Maksim", lastname: "Грибов", age: 32},
+    {id: 2, name: "Ольга ", lastname: "Сидорова", age:  27},
+    {id: 3, name: "Роман", lastname: "Иванов", age: 35}
+])
+
+gt - more
+gte - more than or equal
+lt - less
+lte - less than or equal
+
+db.products.find({price: {$gt: 1000}})
+
+db.products.find({price: {$lt: 4000}})
+
+db.products.insertMany([
+    {id: 3, title: "ski", price: 400},
+    {id: 4, title: "skate", price: 2400},
+    {id: 5, title: "ball", price: 20},
+    {id: 6, title: "tennis racket", price: 570}
+])
+
+and
+or
+
+db.products.find({ 
+    $or: [
+        {price: {$lte: 1000}},
+        {price: {$gte: 2000}}
+        ]
+})
+
+db.products.find({ 
+    $and: [
+        {price: {$gte: 1000}},
+        {price: {$lt: 2000}}
+        ]
+})
+
+db.products.find({price: {$gte: 1000, $lt: 2000}})
