@@ -117,10 +117,12 @@ public class GameField {
         // 6. В случае ошибок в пунктах 4 и 5 возвращаем false.
         // 7. В конце метода возвращаем true (если дошли до конца метода, значит ход успешен).
 
+        System.out.println("Set symbol " + symbol + " : " +coordinates);
+
         String[] co = coordinates.split(" ");
 
         if (co.length != 2) {
-            System.out.println("Incorrect input of coordinates");
+            System.out.println("Incorrect input of coordinates :"+coordinates);
             return false;
         }
 
@@ -128,21 +130,26 @@ public class GameField {
         int cell = Integer.parseInt(co[0]) - 1;
 
         if (row < 0 || row > getFieldSize()) {
-            System.out.println("Incorrect input of coordinates");
+            System.out.println("Incorrect input of coordinates: "+coordinates);
             return false;
         }
 
         if (cell < 0 || cell > getFieldSize()) {
-            System.out.println("Incorrect input of coordinates");
+            System.out.println("Incorrect input of coordinates: "+coordinates);
             return false;
         }
 
-        if (isCellOccupied(row, cell)) {
-            System.out.println("Field is already occupied");
+        if (symbol != null && isCellOccupied(row, cell)) {
+            System.out.println("Field is already occupied: "+coordinates);
             return false;
         }
 
-        this.field[row][cell] = symbol.getValue();
+        if (symbol != null) {
+            this.field[row][cell] = symbol.getValue();
+        } else {
+            this.field[row][cell] = '.';
+        }
+
 
         return true;
     }
@@ -164,10 +171,7 @@ public class GameField {
         // 1. Вернуть true, если выбранная ячейка занята.
         char value = field[row][column];
 
-        if (value != '.') {
-            return true;
-        }
-        return false;
+        return value != '.';
     }
 
     /**
@@ -403,4 +407,13 @@ public class GameField {
 
         return FIELD_SIZE;
     }
+
+    public int getWIN_LENGTH() {
+        return WIN_LENGTH;
+    }
+
+    public char getSymbolByCoordinates(int row, int cell) {
+        return this.field[row][cell];
+    }
+
 }

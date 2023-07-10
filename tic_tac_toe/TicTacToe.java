@@ -2,13 +2,14 @@ package Homework.tic_tac_toe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class TicTacToe {
     private static final List<Player> PLAYERS = new ArrayList<>();
     private static boolean isGameOver;
     private static GameField field;
+    private static final int MIN_FIELD_SIZE = 3;
+    private static final int MAX_FIELD_SIZE = 8;
     private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -106,6 +107,7 @@ public class TicTacToe {
         createPlayers();
 
         field.repaint();
+
     }
 
     /**
@@ -150,11 +152,9 @@ public class TicTacToe {
             System.out.println("Name of the second player");
             String playerName2 = input2.nextLine();
             PLAYERS.add(new HumanPlayer(playerName2, PlayerSymbol.X));
-        } else if (gameMode.equals("2")) {
+        } else {
             System.out.println("Play against the computer");
             PLAYERS.add(new ComputerPlayer(PlayerSymbol.X, field));
-        } else {
-            System.out.println("Invalid mode");
         }
     }
 
@@ -179,6 +179,10 @@ public class TicTacToe {
         // 2. Считать с консоли число, введённое игроком.
         // 3. Повторять шаги 1 и 2 до тех пор, пока игрок не введёт корректное значение.
         // 4. Вернуть введённое значение.
+        if (fieldSize == 3) {
+            return fieldSize;
+        }
+
         boolean validWinSize = false;
         int winLength = 0;
         while (!validWinSize) {

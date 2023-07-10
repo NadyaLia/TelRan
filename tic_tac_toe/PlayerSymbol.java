@@ -39,4 +39,27 @@ public enum PlayerSymbol {
         return VALUE;
     }
 
+    /**
+     * Get the opponent symbol.
+     * Получить символ соперника.
+     *
+     * @param symbol    current symbol / свой символ.
+     * @return          opponent symbol / символ соперника.
+     */
+    public static PlayerSymbol getOpponentSymbol(PlayerSymbol symbol) {
+        // Logic of the method:
+        // Return a symbol other than the one passed to the method.
+
+        // Логика метода:
+        // Вернуть символ, отличный от того, который передан в метод.
+
+        if (symbol == PlayerSymbol.X) {
+            return PlayerSymbol.O;
+        } else if (symbol == PlayerSymbol.O) {
+            return PlayerSymbol.X;
+        } else {
+            return null;
+        }
+    }
+
 }

@@ -39,8 +39,7 @@ public class HumanPlayer extends AbstractPlayer {
         // 2. Вернуть значение, которое ввёл пользователь.
         Scanner input = new Scanner(System.in);
         System.out.println("Please enter the coordinates: ");
-        String coordinates = input.nextLine();
-        return coordinates;
+        return input.nextLine();
     }
 }
 
