@@ -657,6 +657,18 @@ public class ComputerPlayer extends AbstractPlayer {
         return false;
     }
 
+    private boolean isFeasibleMove(int row, int column) {
+        if (checkUpRightDiagonal(row, column)) return true;
+        if (checkDownRightDiagonal(row, column)) return true;
+        if (checkDownLeftDiagonal(row, column)) return true;
+        if (checkUpLeftDiagonal(row, column)) return true;
+        if (checkUpDirection(row, column)) return true;
+        if (checkDownDirection(row, column)) return true;
+        if (checkLeftDirection(row, column)) return true;
+        if (checkRightDirection(row, column)) return true;
+        return false;
+    }
+
     /**
      * Attempting to block the opponent's move.
      * Попытка заблокировать ход противника.
@@ -731,8 +743,10 @@ public class ComputerPlayer extends AbstractPlayer {
 
         for (int row = 1; row <= FIELD.getFieldSize(); row++) {
             for (int cell = 1; cell <= FIELD.getFieldSize(); cell++) {
-                String coordinates = cell + " " + row;
-                if (!FIELD.isCellOccupied(row-1, cell-1)) {
+
+                if (!FIELD.isCellOccupied(row-1, cell-1) && isFeasibleMove(row-1, cell-1)) {
+
+                    String coordinates = coordinatesToString(row, cell);
                     FIELD.setSymbol(this.SYMBOL, coordinates);
                     if (FIELD.isWin(this.SYMBOL.getValue())) {
                         FIELD.setSymbol(null, coordinates);
@@ -791,6 +805,6 @@ public class ComputerPlayer extends AbstractPlayer {
             // Логика метода:
             // Вернуть значения строки и столбца в виде строки с разделителем-пробелом.
 
-            return row + " " + column;
+            return column + " " +row ;
         }
 }

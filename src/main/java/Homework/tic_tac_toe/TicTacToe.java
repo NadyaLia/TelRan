@@ -104,6 +104,10 @@ public class TicTacToe {
         int winLength = getWinLength(fieldSize);
         field = new GameField(fieldSize, winLength);
 
+        if (fieldSize < MIN_FIELD_SIZE || fieldSize > MAX_FIELD_SIZE) {
+            throw new IllegalArgumentException("Field size must be between " + MIN_FIELD_SIZE + " and " + MAX_FIELD_SIZE);
+        }
+
         createPlayers();
 
         field.repaint();
