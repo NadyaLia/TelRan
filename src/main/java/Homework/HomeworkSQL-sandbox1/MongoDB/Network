@@ -1,0 +1,39 @@
+1. Вывести ко-во заблокированных юзеров
+
+db.users.countDocuments(
+     { is_blocked: true }
+)
+
+2. Вывести страны незаблокированных юзеров
+
+db.users.find(
+    { is_blocked: {$ne: true} },
+    { country: 1, _id: 0 }
+)
+
+3. Заблокировать юзеров из China
+
+db.users.updateMany(
+    { country: 'China' },
+    { $set: {is_blocked: true} }
+)
+
+4. Увеличить баланс всех незаблокированных юзеров на 100
+
+db.users.updateMany(
+    {},
+    { $set: {'balance': 0} }
+)
+
+db.users.updateMany(
+     { is_blocked: {$ne: true} },
+     { $inc: {balance: 100} }
+)
+
+5. Добавить несколько реакций в коллекцию reactions
+
+db.reactions.insertMany([
+    { _id: 1, name: 'like', icon: '👍' },
+    { _id: 2, name: 'dislike', icon: '👎' },
+    { _id: 3, name: 'love', icon: '❤️' }
+])
