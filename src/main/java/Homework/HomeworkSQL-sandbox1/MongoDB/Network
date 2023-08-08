@@ -33,7 +33,7 @@ db.users.updateMany(
 5. Добавить несколько реакций в коллекцию reactions
 
 db.reactions.insertMany([
-    { _id: 1, name: 'like', icon: '👍' },
-    { _id: 2, name: 'dislike', icon: '👎' },
-    { _id: 3, name: 'love', icon: '❤️' }
+    { _id: 1, author_id: 1, value: 5 },
+    { _id: 2, author_id: 2, value: 4 },
+    { _id: 3, author_id: 3, value: 3 }
 ])
