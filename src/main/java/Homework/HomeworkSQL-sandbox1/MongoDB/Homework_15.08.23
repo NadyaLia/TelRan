@@ -1,0 +1,46 @@
+1. Найдите ошибки в след/запросе:
+// Увеличить баланс всем юзерам не из Germany на 25%
+db.posts.updateOne(
+    { country: 'Germany'  },
+    { $inc: { balance: .75 } }
+)
+
+posts - users
+updateOne - updateMany
+'Germany' - $ne: 'Germany'
+$inc - $mul
+balance: .75 - balance: 1.25
+
+db.users.updateMany(
+    {country: {$ne: 'Germany'}},
+    {$mul: {balance: 1.25}}
+)
+
+2. Вывести все посты с тегом music
+
+db.posts.find({
+    tag: 'music'
+})
+
+3. Опишите назначение оператора $skip (и вход/выход)
+
+In MongoDB, the $skip operator will skip the first n document from the query result,
+you just need to pass the number of records/documents to be skipped.
+For example, you get the sorted (on salary value) collection of documents and want to know the third maximal value of salary.
+You can use $skip: 2 and the operator limit: 1 at the end of the query.
+
+4. Вывести названия постов и имена авторов, которые имеют отрицательный баланс
+
+db.posts.aggregate([
+    {
+    $lookup: {
+        'from': 'users',
+        'localField': 'author_id',
+        'foreignField': '_id',
+        'as': 'author'
+        }
+    },
+    {$unwind: '$author'},
+    {$match: {'author.balance': {$lt: 0}}},
+    {$project: {'content': 1, 'author.fullname': '$author.fullname', '_id': 0}}
+])
