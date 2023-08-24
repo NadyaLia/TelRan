@@ -12,10 +12,6 @@ public class ElevatorSystem {
         elevatorPositions.put("C", 7);
     }
 
-    public void updateElevatorPosition(String elevator, int position) {
-        elevatorPositions.put(elevator, position);
-    }
-
     public String callElevator(int floor) {
         String closestElevator = null;
         int minDistance = Integer.MAX_VALUE;
